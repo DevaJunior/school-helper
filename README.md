@@ -1,73 +1,35 @@
-# React + TypeScript + Vite
+# SchoolHelper | Plataforma Educacional Integrada
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Uma plataforma educacional completa desenvolvida em React, projetada para conectar alunos, professores e a administração escolar em um único ambiente. Foco absoluto em performance, responsividade e separação de responsabilidades.
 
-Currently, two official plugins are available:
+[Link para o projeto online - Vercel] //Quando eu subir
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## 🚀 Funcionalidades Principais (Em Desenvolvimento)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+* **Sistema Multi-Perfil (RBAC):** Controle de acesso baseado em funções utilizando Firebase Authentication. Visões e permissões distintas para **Alunos** (visualização de notas e horários), **Professores** (lançamento de notas e faltas) e **Secretaria** (gestão de matrículas).
+* **Modo Claro / Escuro (Theme Toggle):** Sistema de temas dinâmico implementado com variáveis CSS globais e persistência de estado.
+* **Dashboards Responsivos:** Interfaces adaptáveis para qualquer dispositivo (Desktop, Tablet, Mobile), garantindo uma experiência de usuário (UX) perfeita em telas de 320px a monitores ultrawide.
+* **Gerenciamento de Dados em Tempo Real:** Integração com Firebase Firestore para leitura e escrita instantânea de dados acadêmicos.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 💻 Tecnologias e Arquitetura
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Este projeto adota uma arquitetura rigorosa, focada na escalabilidade e na otimização de performance, não dependendo de pesados frameworks de UI:
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+* **React 18 & TypeScript:** Tipagem estática para um desenvolvimento seguro e previsível.
+* **Vite:** Build tool ultrarrápida para uma experiência de desenvolvimento superior.
+* **Zustand:** Gerenciamento de estado global leve e focado (utilizado para o controle de temas e estados complexos), evitando o *boilerplate* do Redux.
+* **React Router v6:** Roteamento no lado do cliente (SPA) para navegação fluida entre os painéis.
+* **CSS Puro (Component-Scoped):** Estilização feita inteiramente com CSS nativo. Cada componente possui seu próprio arquivo `styles.css` dedicado, garantindo que não haja vazamento ou conflito de estilos, mantendo o *bundle* limpo.
+* **Firebase (BaaS):** Autenticação e Banco de Dados NoSQL (Firestore).
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+---
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🛠️ Como Executar o Projeto Localmente
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+1. **Clone o repositório:**
+   ```bash
+   git clone [https://github.com/DevaJunior/school-helper.git](https://github.com/DevaJunior/school-helper.git)
