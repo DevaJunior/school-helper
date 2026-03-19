@@ -1,0 +1,39 @@
+.dashboard-root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--bg-color);
+}
+
+.dashboard-main {
+  display: flex;
+  flex: 1;
+}
+
+.dashboard-content {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Responsividade Progressiva */
+@media (max-width: 768px) {
+  .dashboard-content {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-content {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 320px) {
+  .dashboard-content {
+    padding: 12px;
+  }
+}
