@@ -2,9 +2,9 @@
   background-color: var(--surface-color);
   color: var(--text-primary);
   border: 1px solid var(--border-color);
-  padding: 12px 24px;
+  padding: 8px 16px;
   border-radius: 8px;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
   transition: all var(--transition-speed) ease;
@@ -12,47 +12,40 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .toggle-button:hover {
   border-color: var(--primary-color);
   color: var(--primary-color);
-  transform: translateY(-2px);
+  transform: translateY(-1px);
+}
+
+.toggle-icon {
+  font-size: 1.1rem;
 }
 
 /* Responsividade Progressiva */
 
-/* Telas até 768px (Tablets pequenos) */
-@media (max-width: 768px) {
-  .toggle-button {
-    padding: 10px 20px;
-    font-size: 0.95rem;
-  }
-}
-
-/* Telas até 600px (Smartphones grandes em paisagem) */
 @media (max-width: 600px) {
+  .toggle-text {
+    display: none; /* Esconde o texto no mobile */
+  }
+  
   .toggle-button {
-    width: 100%;
-    max-width: 300px;
+    padding: 0;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%; /* Transforma em um botão circular */
   }
 }
 
-/* Telas até 480px (Smartphones comuns) */
-@media (max-width: 480px) {
-  .toggle-button {
-    padding: 8px 16px;
-    font-size: 0.9rem;
-    border-radius: 6px;
-  }
-}
-
-/* Telas até 320px (Smartphones muito pequenos) */
 @media (max-width: 320px) {
   .toggle-button {
-    padding: 6px 12px;
-    font-size: 0.85rem;
-    gap: 4px;
+    width: 34px;
+    height: 34px;
+  }
+  .toggle-icon {
+    font-size: 1rem;
   }
 }
