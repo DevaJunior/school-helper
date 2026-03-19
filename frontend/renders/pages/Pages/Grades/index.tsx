@@ -1,13 +1,42 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './styles.css';
-import { useGradesStore } from '../../../../src/store/useGradesStore';
+import { useGradesStore, type Student } from '../../../../src/store/useGradesStore';
 
-const Grades: React.FC = () => {
-  const { students, loading, fetchStudents } = useGradesStore();
+export const Grades: React.FC = () => {
+  const { students, loading, fetchStudents, saveGrades, isSaving } = useGradesStore();
+
+  // Estados locais para controlar o Modal de edição
+  const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
+  const [gradesForm, setGradesForm] = useState({ grade1: 0, grade2: 0, grade3: 0, grade4: 0 });
 
   useEffect(() => {
     fetchStudents();
   }, [fetchStudents]);
+
+  const handleOpenModal = (student: Student) => {
+    setSelectedStudent(student);
+    // Aqui no futuro você pode carregar as notas existentes do aluno. 
+    // Por enquanto, sempre reseta para 0 ao abrir.
+    setGradesForm({ grade1: 0, grade2: 0, grade3: 0, grade4: 0 });
+  };
+
+  const handleCloseModal = () => {
+    setSelectedStudent(null);
+  };
+
+  const handleSave = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedStudent) return;
+
+    const success = await saveGrades(selectedStudent.uid, gradesForm);
+
+    if (success) {
+      alert(`Notas de ${selectedStudent.displayName} salvas com sucesso!`);
+      handleCloseModal();
+    } else {
+      alert('Houve um erro ao salvar as notas. Tente novamente.');
+    }
+  };
 
   return (
     <div className="grades-container">
@@ -42,11 +71,11 @@ const Grades: React.FC = () => {
                     </div>
                   </td>
                   <td data-label="Status">
-                    {/* Placeholder para a próxima etapa */}
                     <span style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Pendente</span>
                   </td>
                   <td data-label="Ação">
-                    <button 
+                    <button
+                      onClick={() => handleOpenModal(student)}
                       style={{
                         padding: '8px 16px',
                         backgroundColor: 'var(--primary-color)',
@@ -67,6 +96,70 @@ const Grades: React.FC = () => {
           </table>
         )}
       </div>
+
+      {/* Modal de Lançamento de Notas */}
+      {selectedStudent && (
+        <div className="modal-overlay" onClick={handleCloseModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3 className="modal-title">Notas: {selectedStudent.displayName}</h3>
+              <button className="close-button" onClick={handleCloseModal}>&times;</button>
+            </div>
+
+            <form onSubmit={handleSave} className="grades-form">
+              <div className="input-group">
+                <label className="input-label">1º Bimestre</label>
+                <input
+                  type="number"
+                  min="0" max="100" step="0.1" required
+                  className="grade-input"
+                  value={gradesForm.grade1}
+                  onChange={(e) => setGradesForm({ ...gradesForm, grade1: Number(e.target.value) })}
+                />
+              </div>
+              <div className="input-group">
+                <label className="input-label">2º Bimestre</label>
+                <input
+                  type="number"
+                  min="0" max="100" step="0.1" required
+                  className="grade-input"
+                  value={gradesForm.grade2}
+                  onChange={(e) => setGradesForm({ ...gradesForm, grade2: Number(e.target.value) })}
+                />
+              </div>
+              <div className="input-group">
+                <label className="input-label">3º Bimestre</label>
+                <input
+                  type="number"
+                  min="0" max="100" step="0.1" required
+                  className="grade-input"
+                  value={gradesForm.grade3}
+                  onChange={(e) => setGradesForm({ ...gradesForm, grade3: Number(e.target.value) })}
+                />
+              </div>
+              <div className="input-group">
+                <label className="input-label">4º Bimestre</label>
+                <input
+                  type="number"
+                  min="0" max="100" step="0.1" required
+                  className="grade-input"
+                  value={gradesForm.grade4}
+                  onChange={(e) => setGradesForm({ ...gradesForm, grade4: Number(e.target.value) })}
+                />
+              </div>
+
+              <div className="modal-actions">
+                <button type="button" className="btn-cancel" onClick={handleCloseModal} disabled={isSaving}>
+                  Cancelar
+                </button>
+                <button type="submit" className="btn-save" disabled={isSaving}>
+                  {isSaving ? 'Salvando...' : 'Salvar Notas'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
