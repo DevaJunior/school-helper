@@ -3,8 +3,10 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useThemeStore } from './store/useThemeStore';
 import { useAuthStore } from './store/useAuthStore';
 import './styles/global.css';
-import { DashboardLayout } from './../renders/pages/Dashboard/DashboardLayout/index';
-import { Login } from './../renders/pages/Init/Login/index';
+import { Login } from './../renders/pages/Init/Login';
+import Home from './../renders/pages/Pages/Home';
+import Grades from './../renders/pages/Pages/Grades';
+import Schedule from './../renders/pages/Pages/Schedule/index';
 
 // Página inicial temporária do Painel para visualizarmos a montagem
 const DashboardHome: React.FC = () => {
@@ -49,10 +51,13 @@ export const App: React.FC = () => {
         {/* Rota Pública */}
         <Route path="/" element={user ? <Navigate to="/dashboard" /> : <Login />} />
 
-        {/* Rotas Privadas Aninhadas dentro do Layout */}
-        <Route path="/dashboard" element={user ? <DashboardLayout /> : <Navigate to="/" />}>
+        {/* Rotas Privadas Aninhadas dentro do Layout (Home) */}
+        <Route path="/dashboard" element={user ? <Home /> : <Navigate to="/" />}>
           <Route index element={<DashboardHome />} />
-          {/* Futuras rotas entrarão aqui, ex: <Route path="grades" element={<GradesPage />} /> */}
+          
+          <Route path="grades" element={<Grades />} />
+          <Route path="schedule" element={<Schedule />} />
+
         </Route>
       </Routes>
     </BrowserRouter>

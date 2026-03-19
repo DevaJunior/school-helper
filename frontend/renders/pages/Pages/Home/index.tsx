@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import { Header } from '../Header';
-import { Sidebar } from '../../Pages/Sidebar';
 import './styles.css';
 import { useUIStore } from '../../../../src/store/useUIStore';
+import Sidebar from './../../../menus/Sidebar';
 
-export const DashboardLayout: React.FC = () => {
+const Home: React.FC = () => {
   const { isSidebarOpen } = useUIStore();
 
   // Trava a rolagem da página quando a sidebar estiver aberta no celular
@@ -33,3 +33,5 @@ export const DashboardLayout: React.FC = () => {
     </div>
   );
 };
+
+export default Home;

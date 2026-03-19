@@ -1,10 +1,10 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import './styles.css';
-import { useUIStore } from '../../../../src/store/useUIStore';
-import { useAuthStore } from '../../../../src/store/useAuthStore';
+import { useAuthStore } from '../../../src/store/useAuthStore';
+import { useUIStore } from '../../../src/store/useUIStore';
 
-export const Sidebar: React.FC = () => {
+const Sidebar: React.FC = () => {
   const { logout, user } = useAuthStore();
   const { isSidebarOpen, closeSidebar } = useUIStore();
 
@@ -74,3 +74,5 @@ export const Sidebar: React.FC = () => {
     </>
   );
 };
+
+export default Sidebar;
