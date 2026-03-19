@@ -4,10 +4,11 @@ import { useGradesStore, type Student } from '../../../../src/store/useGradesSto
 
 export const Grades: React.FC = () => {
   const { students, loading, fetchStudents, saveGrades, isSaving } = useGradesStore();
-
-  // Estados locais para controlar o Modal de edição
+  
+  // Estados locais
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
   const [gradesForm, setGradesForm] = useState({ grade1: 0, grade2: 0, grade3: 0, grade4: 0 });
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     fetchStudents();
@@ -15,8 +16,6 @@ export const Grades: React.FC = () => {
 
   const handleOpenModal = (student: Student) => {
     setSelectedStudent(student);
-    // Aqui no futuro você pode carregar as notas existentes do aluno. 
-    // Por enquanto, sempre reseta para 0 ao abrir.
     setGradesForm({ grade1: 0, grade2: 0, grade3: 0, grade4: 0 });
   };
 
@@ -29,7 +28,7 @@ export const Grades: React.FC = () => {
     if (!selectedStudent) return;
 
     const success = await saveGrades(selectedStudent.uid, gradesForm);
-
+    
     if (success) {
       alert(`Notas de ${selectedStudent.displayName} salvas com sucesso!`);
       handleCloseModal();
@@ -38,11 +37,33 @@ export const Grades: React.FC = () => {
     }
   };
 
+  // Lógica de Filtro: Filtra por nome ou email, ignorando maiúsculas/minúsculas
+  const filteredStudents = students.filter(student => 
+    student.displayName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    student.email.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="grades-container">
       <header className="grades-header">
-        <h1 className="grades-title">Lançamento de Notas</h1>
-        <p className="grades-subtitle">Gerencie e atualize o boletim dos alunos matriculados.</p>
+        <div className="grades-title-wrapper">
+          <h1 className="grades-title">Lançamento de Notas</h1>
+          <p className="grades-subtitle">Gerencie e atualize o boletim dos alunos matriculados.</p>
+        </div>
+        
+        {/* Barra de Pesquisa */}
+        <div className="search-container">
+          <svg className="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          <input 
+            type="text" 
+            className="search-input" 
+            placeholder="Buscar aluno por nome ou email..." 
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
       </header>
 
       <div className="grades-table-wrapper">
@@ -51,6 +72,10 @@ export const Grades: React.FC = () => {
         ) : students.length === 0 ? (
           <div className="empty-state">
             Nenhum aluno encontrado no sistema no momento.
+          </div>
+        ) : filteredStudents.length === 0 ? (
+          <div className="empty-state">
+            Nenhum aluno corresponde à sua busca "{searchTerm}".
           </div>
         ) : (
           <table className="grades-table">
@@ -62,7 +87,7 @@ export const Grades: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {students.map((student) => (
+              {filteredStudents.map((student) => (
                 <tr key={student.uid}>
                   <td data-label="Aluno">
                     <div className="student-info">
@@ -74,7 +99,7 @@ export const Grades: React.FC = () => {
                     <span style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Pendente</span>
                   </td>
                   <td data-label="Ação">
-                    <button
+                    <button 
                       onClick={() => handleOpenModal(student)}
                       style={{
                         padding: '8px 16px',
@@ -105,46 +130,46 @@ export const Grades: React.FC = () => {
               <h3 className="modal-title">Notas: {selectedStudent.displayName}</h3>
               <button className="close-button" onClick={handleCloseModal}>&times;</button>
             </div>
-
+            
             <form onSubmit={handleSave} className="grades-form">
               <div className="input-group">
                 <label className="input-label">1º Bimestre</label>
-                <input
-                  type="number"
+                <input 
+                  type="number" 
                   min="0" max="100" step="0.1" required
                   className="grade-input"
                   value={gradesForm.grade1}
-                  onChange={(e) => setGradesForm({ ...gradesForm, grade1: Number(e.target.value) })}
+                  onChange={(e) => setGradesForm({...gradesForm, grade1: Number(e.target.value)})}
                 />
               </div>
               <div className="input-group">
                 <label className="input-label">2º Bimestre</label>
-                <input
-                  type="number"
+                <input 
+                  type="number" 
                   min="0" max="100" step="0.1" required
                   className="grade-input"
                   value={gradesForm.grade2}
-                  onChange={(e) => setGradesForm({ ...gradesForm, grade2: Number(e.target.value) })}
+                  onChange={(e) => setGradesForm({...gradesForm, grade2: Number(e.target.value)})}
                 />
               </div>
               <div className="input-group">
                 <label className="input-label">3º Bimestre</label>
-                <input
-                  type="number"
+                <input 
+                  type="number" 
                   min="0" max="100" step="0.1" required
                   className="grade-input"
                   value={gradesForm.grade3}
-                  onChange={(e) => setGradesForm({ ...gradesForm, grade3: Number(e.target.value) })}
+                  onChange={(e) => setGradesForm({...gradesForm, grade3: Number(e.target.value)})}
                 />
               </div>
               <div className="input-group">
                 <label className="input-label">4º Bimestre</label>
-                <input
-                  type="number"
+                <input 
+                  type="number" 
                   min="0" max="100" step="0.1" required
                   className="grade-input"
                   value={gradesForm.grade4}
-                  onChange={(e) => setGradesForm({ ...gradesForm, grade4: Number(e.target.value) })}
+                  onChange={(e) => setGradesForm({...gradesForm, grade4: Number(e.target.value)})}
                 />
               </div>
 

@@ -18,32 +18,161 @@
   font-size: 0.95rem;
 }
 
-.schedule-content {
+/* TABS STYLES */
+.tabs-container {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  /* Esconde a barra de rolagem mas mantém a funcionalidade */
+  scrollbar-width: none; 
+}
+
+.tabs-container::-webkit-scrollbar {
+  display: none;
+}
+
+.tab-button {
+  padding: 10px 20px;
+  background-color: var(--surface-color);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.tab-button:hover {
+  background-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+.tab-button.active {
+  background-color: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+  box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+}
+
+/* DAY CONTENT STYLES */
+.day-content-wrapper {
   background-color: var(--surface-color);
   border: 1px solid var(--border-color);
   border-radius: 12px;
-  padding: 60px 20px;
-  text-align: center;
+  padding: 24px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+  min-height: 300px;
+}
+
+.day-header {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px dashed var(--border-color);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.classes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.class-card {
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+  border-radius: 8px;
+  background-color: var(--bg-color);
+  border-left: 4px solid var(--primary-color);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.class-card:hover {
+  transform: translateX(4px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.class-time {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-weight: 700;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  min-width: 60px;
+  border-right: 1px solid var(--border-color);
+  padding-right: 16px;
+}
+
+.class-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.class-subject {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 1.05rem;
+}
+
+.class-teacher {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.class-room {
+  font-size: 0.8rem;
+  background-color: rgba(59, 130, 246, 0.1);
+  color: var(--primary-color);
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-weight: 600;
+  align-self: flex-start;
+  margin-top: 4px;
+}
+
+/* Cores específicas para diferenciar matérias */
+.class-card.math { border-left-color: #EF4444; }
+.class-card.math .class-room { background-color: rgba(239, 68, 68, 0.1); color: #EF4444; }
+
+.class-card.science { border-left-color: #10B981; }
+.class-card.science .class-room { background-color: rgba(16, 185, 129, 0.1); color: #10B981; }
+
+.class-card.history { border-left-color: #F59E0B; }
+.class-card.history .class-room { background-color: rgba(245, 158, 11, 0.1); color: #F59E0B; }
+
+.class-card.languages { border-left-color: #8B5CF6; }
+.class-card.languages .class-room { background-color: rgba(139, 92, 246, 0.1); color: #8B5CF6; }
+
+.empty-day {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 16px;
+  height: 200px;
+  color: var(--text-secondary);
+  text-align: center;
+  gap: 12px;
 }
 
-.schedule-icon {
+.empty-day svg {
   width: 48px;
   height: 48px;
-  color: var(--primary-color);
-  opacity: 0.8;
-}
-
-.schedule-empty {
-  color: var(--text-secondary);
-  font-size: 1.05rem;
-  max-width: 400px;
-  line-height: 1.5;
+  opacity: 0.5;
 }
 
 /* Responsividade */
@@ -51,8 +180,17 @@
   .schedule-title {
     font-size: 1.25rem;
   }
-  .schedule-content {
-    padding: 40px 16px;
+  .day-content-wrapper {
+    padding: 16px;
+  }
+  .class-card {
+    padding: 12px;
+    gap: 12px;
+  }
+  .class-time {
+    min-width: 50px;
+    padding-right: 12px;
+    font-size: 0.85rem;
   }
 }
 
