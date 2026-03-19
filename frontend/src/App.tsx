@@ -8,19 +8,7 @@ import { Grades } from './../renders/pages/Pages/Grades/index';
 import Schedule from './../renders/pages/Pages/Schedule/index';
 import MyGrades from './../renders/pages/Pages/MyGrades/index';
 import Home from './../renders/pages/Pages/Home/index';
-
-const DashboardHome: React.FC = () => {
-  const { user } = useAuthStore();
-  return (
-    <div>
-      <h2 style={{ marginBottom: '16px' }}>Visão Geral</h2>
-      <div style={{ backgroundColor: 'var(--surface-color)', padding: '24px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
-        <p>Olá, <strong>{user?.displayName}</strong>! Bem-vindo ao painel principal.</p>
-        <p style={{ marginTop: '8px', color: 'var(--text-secondary)' }}>Navegue pelo menu lateral para acessar suas ferramentas.</p>
-      </div>
-    </div>
-  );
-};
+import { Overview } from './../renders/pages/Pages/Overview/index';
 
 export const App: React.FC = () => {
   const theme = useThemeStore((state) => state.theme);
@@ -51,7 +39,8 @@ export const App: React.FC = () => {
         <Route path="/" element={user ? <Navigate to="/dashboard" /> : <Login />} />
 
         <Route path="/dashboard" element={user ? <Home /> : <Navigate to="/" />}>
-          <Route index element={<DashboardHome />} />
+          {/* O index agora aponta para o componente Overview */}
+          <Route index element={<Overview />} />
           <Route path="grades" element={<Grades />} />
           <Route path="my-grades" element={<MyGrades />} />
           <Route path="schedule" element={<Schedule />} />
