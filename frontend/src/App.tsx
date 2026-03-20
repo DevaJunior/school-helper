@@ -16,6 +16,7 @@ import { NotFound } from './../renders/pages/Pages/NotFound';
 import { GlobalLoading } from './../renders/components/GlobalLoading';
 import { Classes } from './../renders/pages/Pages/Classes';
 import { Attendance } from './../renders/pages/Pages/Attendance';
+import { Profile } from './../renders/pages/Pages/Profile/index';
 
 export const App: React.FC = () => {
   const theme = useThemeStore((state) => state.theme);
@@ -50,6 +51,7 @@ export const App: React.FC = () => {
           <Route path="admin" element={<AdminPanel />} />
           <Route path="classes" element={<Classes />} />
           <Route path="attendance" element={<Attendance />} />
+          <Route path="profile" element={<Profile />} />
         </Route>
 
         <Route path="*" element={<NotFound />} />

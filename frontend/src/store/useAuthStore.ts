@@ -1,11 +1,12 @@
 import { create } from 'zustand';
-import { signInWithPopup, signOut, onAuthStateChanged, type Unsubscribe } from 'firebase/auth';
-import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
-import { auth, db, googleProvider } from '../config/firebase';
+import { signInWithPopup, signOut, onAuthStateChanged, updateProfile, type Unsubscribe } from 'firebase/auth';
+import { doc, getDoc, setDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { auth, db, storage, googleProvider } from '../config/firebase';
 
 export type UserRole = 'student' | 'teacher' | 'admin';
 
-interface AppUser {
+export interface AppUser {
   uid: string;
   email: string | null;
   displayName: string | null;
@@ -16,15 +17,17 @@ interface AppUser {
 interface AuthState {
   user: AppUser | null;
   loading: boolean;
+  isUpdatingProfile: boolean;
   loginWithGoogle: () => Promise<void>;
   logout: () => Promise<void>;
-  // CORREÇÃO: Agora o TS sabe que essa função retorna o Unsubscribe do Firebase
   initAuthListener: () => Unsubscribe;
+  updateUserProfile: (displayName: string, file: File | null) => Promise<boolean>;
 }
 
-export const useAuthStore = create<AuthState>((set) => ({
+export const useAuthStore = create<AuthState>((set, get) => ({
   user: null,
   loading: true,
+  isUpdatingProfile: false,
 
   loginWithGoogle: async () => {
     try {
@@ -103,6 +106,55 @@ export const useAuthStore = create<AuthState>((set) => ({
         set({ user: null, loading: false });
       }
     });
-    return unsubscribe; // Este retorno agora bate com a tipagem correta
+    return unsubscribe;
   },
+
+  updateUserProfile: async (displayName: string, file: File | null) => {
+    const currentUser = auth.currentUser;
+    const stateUser = get().user;
+    
+    if (!currentUser || !stateUser) return false;
+
+    set({ isUpdatingProfile: true });
+
+    try {
+      let newPhotoURL = currentUser.photoURL;
+
+      // Se houver um arquivo de imagem, faz o upload no Firebase Storage
+      if (file) {
+        const fileRef = ref(storage, `SchoolHelper_Avatars/${currentUser.uid}`);
+        await uploadBytes(fileRef, file);
+        newPhotoURL = await getDownloadURL(fileRef);
+      }
+
+      // 1. Atualiza no Firebase Auth
+      await updateProfile(currentUser, {
+        displayName: displayName,
+        photoURL: newPhotoURL
+      });
+
+      // 2. Atualiza no Firestore (Banco de Dados)
+      const userRef = doc(db, 'SchoolHelper_Users', currentUser.uid);
+      await updateDoc(userRef, {
+        displayName: displayName,
+        photoURL: newPhotoURL
+      });
+
+      // 3. Atualiza o Estado Local (Zustand)
+      set({
+        user: {
+          ...stateUser,
+          displayName: displayName,
+          photoURL: newPhotoURL
+        },
+        isUpdatingProfile: false
+      });
+
+      return true;
+    } catch (error) {
+      console.error('Erro ao atualizar perfil:', error);
+      set({ isUpdatingProfile: false });
+      return false;
+    }
+  }
 }));

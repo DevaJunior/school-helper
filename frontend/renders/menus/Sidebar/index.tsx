@@ -35,6 +35,18 @@ const Sidebar: React.FC = () => {
             Início
           </NavLink>
 
+          {/* PERFIL (Para todos os usuários) */}
+          <NavLink
+            to="/dashboard/profile"
+            className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+            onClick={closeSidebar}
+          >
+            <svg className="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+            Meu Perfil
+          </NavLink>
+
           <NavLink
             to="/dashboard/classes"
             className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
@@ -46,7 +58,6 @@ const Sidebar: React.FC = () => {
             Turmas
           </NavLink>
 
-          {/* Exclusivo para Admins e Professores */}
           {(user?.role === 'teacher' || user?.role === 'admin') && (
             <>
               <NavLink
@@ -73,7 +84,6 @@ const Sidebar: React.FC = () => {
             </>
           )}
 
-          {/* Exclusivo para Alunos */}
           {user?.role === 'student' && (
             <NavLink
               to="/dashboard/my-grades"
@@ -98,7 +108,6 @@ const Sidebar: React.FC = () => {
             Horários
           </NavLink>
 
-          {/* Exclusivo para Administradores */}
           {user?.role === 'admin' && (
             <NavLink
               to="/dashboard/admin"
