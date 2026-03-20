@@ -19,6 +19,7 @@ interface AuthState {
   loading: boolean;
   isUpdatingProfile: boolean;
   loginWithGoogle: () => Promise<void>;
+  loginAsDemo: () => void;
   logout: () => Promise<void>;
   initAuthListener: () => Unsubscribe;
   updateUserProfile: (displayName: string, file: File | null) => Promise<boolean>;
@@ -72,8 +73,22 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     }
   },
 
+  loginAsDemo: () => {
+    const demoUser: AppUser = {
+      uid: 'demo_student_123',
+      email: 'aluno.schoolhelper@dws.com.br',
+      displayName: 'Aluno Visitante (Demo)',
+      photoURL: '',
+      role: 'student',
+    };
+    // Salva na sessão para não deslogar ao dar F5
+    sessionStorage.setItem('@SchoolHelper:demo_user', 'true');
+    set({ user: demoUser });
+  },
+
   logout: async () => {
     try {
+      sessionStorage.removeItem('@SchoolHelper:demo_user');
       await signOut(auth);
       set({ user: null });
     } catch (error) {
@@ -82,6 +97,23 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   },
 
   initAuthListener: () => {
+    // Verifica se é o usuário Demo ativo na sessão
+    const isDemo = sessionStorage.getItem('@SchoolHelper:demo_user');
+    if (isDemo) {
+      set({
+        user: {
+          uid: 'demo_student_123',
+          email: 'aluno.schoolhelper@dws.com.br',
+          displayName: 'Aluno Visitante (Demo)',
+          photoURL: '',
+          role: 'student',
+        },
+        loading: false
+      });
+      return () => {}; // Retorna unsubscribe vazio para não quebrar o React
+    }
+
+    // Fluxo normal do Firebase
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
         const userRef = doc(db, 'SchoolHelper_Users', firebaseUser.uid);
@@ -113,6 +145,12 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     const currentUser = auth.currentUser;
     const stateUser = get().user;
     
+    // Bloqueia edição se for o usuário Demo
+    if (stateUser?.uid === 'demo_student_123') {
+      alert('A edição de perfil está desativada para a conta de demonstração.');
+      return false;
+    }
+
     if (!currentUser || !stateUser) return false;
 
     set({ isUpdatingProfile: true });
@@ -120,33 +158,25 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     try {
       let newPhotoURL = currentUser.photoURL;
 
-      // Se houver um arquivo de imagem, faz o upload no Firebase Storage
       if (file) {
         const fileRef = ref(storage, `SchoolHelper_Avatars/${currentUser.uid}`);
         await uploadBytes(fileRef, file);
         newPhotoURL = await getDownloadURL(fileRef);
       }
 
-      // 1. Atualiza no Firebase Auth
       await updateProfile(currentUser, {
         displayName: displayName,
         photoURL: newPhotoURL
       });
 
-      // 2. Atualiza no Firestore (Banco de Dados)
       const userRef = doc(db, 'SchoolHelper_Users', currentUser.uid);
       await updateDoc(userRef, {
         displayName: displayName,
         photoURL: newPhotoURL
       });
 
-      // 3. Atualiza o Estado Local (Zustand)
       set({
-        user: {
-          ...stateUser,
-          displayName: displayName,
-          photoURL: newPhotoURL
-        },
+        user: { ...stateUser, displayName: displayName, photoURL: newPhotoURL },
         isUpdatingProfile: false
       });
 

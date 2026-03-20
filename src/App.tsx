@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useThemeStore } from './store/useThemeStore';
 import { useAuthStore } from './store/useAuthStore';
 import './styles/global.css';
-import { Login } from './../renders/pages/Init/Login';
 import { Grades } from './../renders/pages/Pages/Grades';
 import Schedule from './../renders/pages/Pages/Schedule';
 import MyGrades from './../renders/pages/Pages/MyGrades';
@@ -17,6 +16,7 @@ import { GlobalLoading } from './../renders/components/GlobalLoading';
 import { Classes } from './../renders/pages/Pages/Classes';
 import { Attendance } from './../renders/pages/Pages/Attendance';
 import { Profile } from './../renders/pages/Pages/Profile/index';
+import Login from './../renders/pages/Init/Login/index';
 
 export const App: React.FC = () => {
   const theme = useThemeStore((state) => state.theme);
