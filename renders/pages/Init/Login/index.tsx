@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import './styles.css'; // Mantenha o seu arquivo de estilos
 import { useAuthStore } from '../../../../src/store/useAuthStore';
 
+
 // role: admin
 // role: teacher
 // role: student
+
 
 export const Login: React.FC = () => {
   const { loginAsDemo } = useAuthStore();
