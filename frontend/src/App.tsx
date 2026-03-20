@@ -9,6 +9,7 @@ import Schedule from './../renders/pages/Pages/Schedule/index';
 import MyGrades from './../renders/pages/Pages/MyGrades/index';
 import Home from './../renders/pages/Pages/Home/index';
 import { Overview } from './../renders/pages/Pages/Overview/index';
+import { AdminPanel } from './../renders/pages/Pages/AdminPanel/index';
 
 export const App: React.FC = () => {
   const theme = useThemeStore((state) => state.theme);
@@ -39,11 +40,12 @@ export const App: React.FC = () => {
         <Route path="/" element={user ? <Navigate to="/dashboard" /> : <Login />} />
 
         <Route path="/dashboard" element={user ? <Home /> : <Navigate to="/" />}>
-          {/* O index agora aponta para o componente Overview */}
           <Route index element={<Overview />} />
           <Route path="grades" element={<Grades />} />
           <Route path="my-grades" element={<MyGrades />} />
           <Route path="schedule" element={<Schedule />} />
+          {/* Nova Rota Administrativa */}
+          <Route path="admin" element={<AdminPanel />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -5,6 +5,16 @@
 
 .my-grades-header {
   margin-bottom: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.header-titles {
+  display: flex;
+  flex-direction: column;
 }
 
 .my-grades-title {
@@ -16,6 +26,34 @@
 .my-grades-subtitle {
   color: var(--text-secondary);
   font-size: 0.95rem;
+}
+
+.btn-print {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background-color: var(--surface-color);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.btn-print:hover {
+  background-color: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+}
+
+.print-icon {
+  width: 20px;
+  height: 20px;
 }
 
 .grades-grid {
@@ -110,6 +148,11 @@
   font-size: 1.05rem;
 }
 
+/* Elemento exclusivo para impressão oficial */
+.print-only-header {
+  display: none;
+}
+
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
@@ -127,5 +170,81 @@
   }
   .average-value {
     font-size: 2.8rem;
+  }
+  .my-grades-header {
+    flex-direction: column;
+  }
+  .btn-print {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* ========================================= */
+/* MÁGICA DE IMPRESSÃO / EXPORTAÇÃO PARA PDF */
+/* ========================================= */
+@media print {
+  /* Esconde TUDO da página por padrão */
+  body * {
+    visibility: hidden;
+  }
+
+  /* Exibe apenas o container do boletim e seus filhos */
+  .my-grades-container, .my-grades-container * {
+    visibility: visible;
+  }
+
+  /* Reposiciona o boletim para o topo absoluto da folha A4 */
+  .my-grades-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+  }
+
+  /* Esconde o botão de imprimir e legendas de UI na folha */
+  .btn-print, .my-grades-subtitle {
+    display: none !important;
+  }
+
+  /* Mostra o cabeçalho oficial do documento */
+  .print-only-header {
+    display: block;
+    text-align: center;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #000;
+    padding-bottom: 10px;
+  }
+
+  .print-only-header h2 {
+    font-size: 1.5rem;
+    margin-bottom: 4px;
+    color: #000;
+  }
+
+  .print-only-header p {
+    font-size: 1rem;
+    color: #333;
+  }
+
+  /* Força cores claras para não gastar tinta preta caso o usuário use Dark Mode */
+  .grade-card, .average-section, .my-grades-container {
+    background-color: white !important;
+    color: black !important;
+    border-color: #ccc !important;
+    box-shadow: none !important;
+    page-break-inside: avoid; /* Evita que o card corte na metade da folha */
+  }
+
+  .my-grades-title, .bimester-label, .average-label {
+    color: black !important;
+  }
+
+  /* Garante que cores de fundo dos badges sejam impressas (Chrome/Safari) */
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
 }

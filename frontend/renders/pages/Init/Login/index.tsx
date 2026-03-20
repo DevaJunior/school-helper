@@ -3,6 +3,10 @@ import './styles.css';
 import { ThemeToggle } from '../../../components/ThemeToggle';
 import { useAuthStore } from '../../../../src/store/useAuthStore';
 
+// role: admin
+// role: teacher
+// role: student
+
 export const Login: React.FC = () => {
   const { loginWithGoogle } = useAuthStore();
 
