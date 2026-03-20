@@ -7,7 +7,7 @@ import { useAuthStore } from '../../../../src/store/useAuthStore';
 // role: student
 
 export const Login: React.FC = () => {
-  const { loginWithGoogle, loginAsDemo } = useAuthStore();
+  const { loginAsDemo } = useAuthStore();
 
   // Valores default para facilitar o teste dos avaliadores
   const [email, setEmail] = useState('aluno.schoolhelper@dws.com.br');
