@@ -10,6 +10,10 @@ import MyGrades from './../renders/pages/Pages/MyGrades/index';
 import Home from './../renders/pages/Pages/Home/index';
 import { Overview } from './../renders/pages/Pages/Overview/index';
 import { AdminPanel } from './../renders/pages/Pages/AdminPanel/index';
+import { ToastContainer } from './../renders/components/Toast/index';
+import { NotFound } from './../renders/pages/Pages/NotFound/index';
+
+import { GlobalLoading } from './../renders/components/GlobalLoading';
 
 export const App: React.FC = () => {
   const theme = useThemeStore((state) => state.theme);
@@ -26,16 +30,16 @@ export const App: React.FC = () => {
     };
   }, [initAuthListener]);
 
+  // Renderiza o novo componente de Loading Global enquanto o Firebase checa a sessão
   if (loading) {
-    return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: 'var(--bg-color)', color: 'var(--text-primary)' }}>
-        Carregando...
-      </div>
-    );
+    return <GlobalLoading />;
   }
 
   return (
     <BrowserRouter>
+      {/* O ToastContainer fica fora das rotas para sobrepor toda a aplicação */}
+      <ToastContainer />
+      
       <Routes>
         <Route path="/" element={user ? <Navigate to="/dashboard" /> : <Login />} />
 
@@ -44,9 +48,11 @@ export const App: React.FC = () => {
           <Route path="grades" element={<Grades />} />
           <Route path="my-grades" element={<MyGrades />} />
           <Route path="schedule" element={<Schedule />} />
-          {/* Nova Rota Administrativa */}
           <Route path="admin" element={<AdminPanel />} />
         </Route>
+
+        {/* Rota Coringa 404: Captura qualquer URL que não exista nas rotas acima */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );

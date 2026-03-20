@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import './styles.css';
 import { useGradesStore, type Student } from '../../../../src/store/useGradesStore';
+import { useToastStore } from '../../../../src/store/useToastStore';
 
 export const Grades: React.FC = () => {
   const { students, loading, fetchStudents, saveGrades, isSaving } = useGradesStore();
+  // Inicialização do Toast
+  const addToast = useToastStore((state) => state.addToast);
   
   // Estados locais
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
@@ -16,6 +19,8 @@ export const Grades: React.FC = () => {
 
   const handleOpenModal = (student: Student) => {
     setSelectedStudent(student);
+    // Idealmente aqui buscaríamos as notas reais do Firebase para preencher o form,
+    // mas para este fluxo mantemos zerado.
     setGradesForm({ grade1: 0, grade2: 0, grade3: 0, grade4: 0 });
   };
 
@@ -30,10 +35,12 @@ export const Grades: React.FC = () => {
     const success = await saveGrades(selectedStudent.uid, gradesForm);
     
     if (success) {
-      alert(`Notas de ${selectedStudent.displayName} salvas com sucesso!`);
+      // SUBSTITUÍDO: alert nativo por Toast de Sucesso
+      addToast(`Notas de ${selectedStudent.displayName} salvas com sucesso!`, 'success');
       handleCloseModal();
     } else {
-      alert('Houve um erro ao salvar as notas. Tente novamente.');
+      // SUBSTITUÍDO: alert nativo por Toast de Erro
+      addToast('Houve um erro ao salvar as notas. Tente novamente.', 'error');
     }
   };
 
@@ -96,6 +103,7 @@ export const Grades: React.FC = () => {
                     </div>
                   </td>
                   <td data-label="Status">
+                    {/* Status fixo "Pendente" para simplificação */}
                     <span style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Pendente</span>
                   </td>
                   <td data-label="Ação">
@@ -109,8 +117,11 @@ export const Grades: React.FC = () => {
                         borderRadius: '6px',
                         cursor: 'pointer',
                         fontWeight: '600',
-                        fontSize: '0.85rem'
+                        fontSize: '0.85rem',
+                        transition: 'background-color 0.2s'
                       }}
+                      onMouseOver={(e) => (e.currentTarget.style.backgroundColor = 'var(--primary-hover)')}
+                      onMouseOut={(e) => (e.currentTarget.style.backgroundColor = 'var(--primary-color)')}
                     >
                       Editar Notas
                     </button>
