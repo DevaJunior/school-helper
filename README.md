@@ -2,7 +2,10 @@
 
 Uma plataforma educacional completa desenvolvida em React, projetada para conectar alunos, professores e a administração escolar em um único ambiente. Foco absoluto em performance, responsividade e separação de responsabilidades.
 
-[Link para o projeto online - Vercel] //Quando eu subir
+## 🌐 Deploy
+
+A aplicação está disponível em:
+👉 [Acessar SchoolHelper](https://school-helper-ecru.vercel.app)
 
 ---
 
