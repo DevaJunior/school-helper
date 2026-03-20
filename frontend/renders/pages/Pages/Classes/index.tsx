@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './styles.css';
-import { useClassesStore } from '../../../../src/store/useClassesStore';
+import { useClassesStore } from '../../../../src/store/useAttendanceStore.ts';
 import { useAuthStore } from '../../../../src/store/useAuthStore';
 import { useToastStore } from '../../../../src/store/useToastStore';
 

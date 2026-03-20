@@ -15,6 +15,7 @@ import { NotFound } from './../renders/pages/Pages/NotFound/index';
 
 import { GlobalLoading } from './../renders/components/GlobalLoading';
 import { Classes } from './../renders/pages/Pages/Classes/index';
+import { Attendance } from './../renders/pages/Pages/Attendance/index';
 
 export const App: React.FC = () => {
   const theme = useThemeStore((state) => state.theme);
@@ -48,6 +49,7 @@ export const App: React.FC = () => {
           <Route path="schedule" element={<Schedule />} />
           <Route path="admin" element={<AdminPanel />} />
           <Route path="classes" element={<Classes />} />
+          <Route path="attendance" element={<Attendance />} />
         </Route>
 
         <Route path="*" element={<NotFound />} />
