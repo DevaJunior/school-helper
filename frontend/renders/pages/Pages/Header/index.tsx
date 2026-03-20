@@ -1,12 +1,17 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import './styles.css';
 import { useUIStore } from '../../../../src/store/useUIStore';
-import { ThemeToggle } from '../../../components/ThemeToggle';
 import { useAuthStore } from '../../../../src/store/useAuthStore';
 
 export const Header: React.FC = () => {
   const { user } = useAuthStore();
   const { toggleSidebar } = useUIStore();
+  const navigate = useNavigate();
+
+  const handleProfileClick = () => {
+    navigate('/dashboard/profile');
+  };
 
   return (
     <header className="header-container">
@@ -20,18 +25,19 @@ export const Header: React.FC = () => {
       </div>
 
       <div className="header-right">
-        <ThemeToggle />
         {user && (
-          <div className="user-info">
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+          <div className="user-info-wrapper" onClick={handleProfileClick} title="Ir para Meu Perfil">
+            <div className="user-text-info">
               <span className="user-name">{user.displayName || 'Usuário'}</span>
-              <span className="user-role">{user.role}</span>
+              <span className="user-role">
+                {user.role === 'admin' ? 'Admin' : user.role === 'teacher' ? 'Professor' : 'Aluno'}
+              </span>
             </div>
             {user.photoURL ? (
               <img src={user.photoURL} alt="Avatar do usuário" className="user-avatar" />
             ) : (
-              <div className="user-avatar" style={{ backgroundColor: 'var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                {user.displayName?.charAt(0) || 'U'}
+              <div className="user-avatar-placeholder">
+                {user.displayName?.charAt(0).toUpperCase() || 'U'}
               </div>
             )}
           </div>
