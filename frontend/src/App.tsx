@@ -3,19 +3,19 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useThemeStore } from './store/useThemeStore';
 import { useAuthStore } from './store/useAuthStore';
 import './styles/global.css';
-import { Login } from './../renders/pages/Init/Login/index';
-import { Grades } from './../renders/pages/Pages/Grades/index';
-import Schedule from './../renders/pages/Pages/Schedule/index';
-import MyGrades from './../renders/pages/Pages/MyGrades/index';
-import Home from './../renders/pages/Pages/Home/index';
-import { Overview } from './../renders/pages/Pages/Overview/index';
-import { AdminPanel } from './../renders/pages/Pages/AdminPanel/index';
-import { ToastContainer } from './../renders/components/Toast/index';
-import { NotFound } from './../renders/pages/Pages/NotFound/index';
+import { Login } from './../renders/pages/Init/Login';
+import { Grades } from './../renders/pages/Pages/Grades';
+import Schedule from './../renders/pages/Pages/Schedule';
+import MyGrades from './../renders/pages/Pages/MyGrades';
+import Home from './../renders/pages/Pages/Home';
+import { Overview } from './../renders/pages/Pages/Overview';
+import { AdminPanel } from './../renders/pages/Pages/AdminPanel';
+import { ToastContainer } from './../renders/components/Toast';
+import { NotFound } from './../renders/pages/Pages/NotFound';
 
 import { GlobalLoading } from './../renders/components/GlobalLoading';
-import { Classes } from './../renders/pages/Pages/Classes/index';
-import { Attendance } from './../renders/pages/Pages/Attendance/index';
+import { Classes } from './../renders/pages/Pages/Classes';
+import { Attendance } from './../renders/pages/Pages/Attendance';
 
 export const App: React.FC = () => {
   const theme = useThemeStore((state) => state.theme);
