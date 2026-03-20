@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import './styles.css';
 import { useAuthStore } from '../../../src/store/useAuthStore';
 import { useUIStore } from '../../../src/store/useUIStore';
+
 const Sidebar: React.FC = () => {
   const { logout, user } = useAuthStore();
   const { isSidebarOpen, closeSidebar } = useUIStore();
@@ -34,7 +35,17 @@ const Sidebar: React.FC = () => {
             Início
           </NavLink>
 
-          {/* Visão Exclusiva para Professores e Admins */}
+          <NavLink
+            to="/dashboard/classes"
+            className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+            onClick={closeSidebar}
+          >
+            <svg className="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+            Turmas
+          </NavLink>
+
           {(user?.role === 'teacher' || user?.role === 'admin') && (
             <NavLink
               to="/dashboard/grades"
@@ -48,7 +59,6 @@ const Sidebar: React.FC = () => {
             </NavLink>
           )}
 
-          {/* Visão Exclusiva para Alunos */}
           {user?.role === 'student' && (
             <NavLink
               to="/dashboard/my-grades"
@@ -73,7 +83,6 @@ const Sidebar: React.FC = () => {
             Horários
           </NavLink>
 
-          {/* Visão Exclusiva para Administradores */}
           {user?.role === 'admin' && (
             <NavLink
               to="/dashboard/admin"

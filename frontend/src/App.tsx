@@ -14,6 +14,7 @@ import { ToastContainer } from './../renders/components/Toast/index';
 import { NotFound } from './../renders/pages/Pages/NotFound/index';
 
 import { GlobalLoading } from './../renders/components/GlobalLoading';
+import { Classes } from './../renders/pages/Pages/Classes/index';
 
 export const App: React.FC = () => {
   const theme = useThemeStore((state) => state.theme);
@@ -30,16 +31,13 @@ export const App: React.FC = () => {
     };
   }, [initAuthListener]);
 
-  // Renderiza o novo componente de Loading Global enquanto o Firebase checa a sessão
   if (loading) {
     return <GlobalLoading />;
   }
 
   return (
     <BrowserRouter>
-      {/* O ToastContainer fica fora das rotas para sobrepor toda a aplicação */}
       <ToastContainer />
-      
       <Routes>
         <Route path="/" element={user ? <Navigate to="/dashboard" /> : <Login />} />
 
@@ -49,9 +47,9 @@ export const App: React.FC = () => {
           <Route path="my-grades" element={<MyGrades />} />
           <Route path="schedule" element={<Schedule />} />
           <Route path="admin" element={<AdminPanel />} />
+          <Route path="classes" element={<Classes />} />
         </Route>
 
-        {/* Rota Coringa 404: Captura qualquer URL que não exista nas rotas acima */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
